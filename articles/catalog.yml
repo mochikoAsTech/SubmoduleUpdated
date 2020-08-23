@@ -1,4 +1,5 @@
 PREDEF:
+# はじめに
   - preface.re
 
 CHAPS:
@@ -7,4 +8,7 @@ CHAPS:
 APPENDIX:
 
 POSTDEF:
+# あとがき
+  - postscript.re
+# 執筆者一覧
   - contributors.re
