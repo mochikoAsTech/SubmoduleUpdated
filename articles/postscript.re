@@ -14,12 +14,11 @@ mochikoAsTech
 
 == PDF版のダウンロード
 
-本書（紙の書籍）をお買い上げいただいた方は、下記のURLからPDF版を無料でダウンロードできます。
+本書はどなたでもPDF版を無料ダウンロードできます。
+ぜひあなたの周りにいるサブモジュールでお悩みの方に知らせてあげてください。
 
  * ダウンロードURL
  ** @<href>{https://mochikoastech.booth.pm/items/xxxxxxx}
- * パスワード
- ** @<ttb>{xxxxxx}
 
 == Special Thanks:
 
@@ -31,4 +30,5 @@ mochikoAsTech
 
 === 参考文献・ウェブサイト
 
- * [git-scm.com](https://git-scm.com/)
+ * git-scm.com
+ ** @<href>{https://git-scm.com/}
