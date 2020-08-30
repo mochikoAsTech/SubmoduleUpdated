@@ -31,9 +31,9 @@ $ cd main_project
 $ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated
 //}
 
-今回はサブモジュールとして、本書の原稿リポジトリを追加してみました。@<fn>{url}追加したSubmoduleUpdatedをクローンしてくるため、こんな表示がされたと思います。
+今回はサブモジュールとして、本書の原稿リポジトリを追加してみました。@<fn>{url}追加したSubmoduleUpdatedをクローンしてくるため、こんな表示がされたと思います。このときサブモジュールの中身はクローンしてきますが、サブモジュールのさらにサブモジュール以下については再帰的にはクローンしてきてくれないので注意が必要です。
 
-//footnote[url][今回はGitHubのURLを指定しましたが、このような絶対のURLに限らず、相対パスでサブモジュールのリポジトリを指定することも可能です。]
+//footnote[url][今回はGitHubのURLを指定しましたが、このような絶対のURLに限らず、@<code>{git submodule add ../SubmoduleUpdated}のような相対パスでサブモジュールのリポジトリを指定することも可能です。ただし相対パスで追加すると、サブモジュールのリモートリポジトリ（@<code>{remote.origin.url}）が@<code>{C:/Users/mochikoAsTech/Documents/SubmoduleUpdated}のようになってしまうので、特に理由が無ければリモートのURLで指定する方がお勧めです。]
 
 //cmd{
 $ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated
@@ -46,20 +46,16 @@ objects: 100% (162/162), 518.33 KiB | 772.00 KiB/s, done.
 Resolving deltas: 100% (43/43), done.
 //}
 
-サブモジュールを追加するとき、特にディレクトリ名を指定しないと、次のようにリポジトリの名前がそのままディレクトリ名となります。（@<img>{SubmoduleUpdated_1}）
+サブモジュールを追加するとき、今回のように特にディレクトリ名を指定しないと、次のようにリポジトリの名前（@<code>{SubmoduleUpdated}）がそのままディレクトリ名となります。（@<img>{SubmoduleUpdated_1}）
 
 //image[SubmoduleUpdated_1][SubmoduleUpdatedがサブモジュールとして追加された][scale=0.8]{
 //}
 
+次のように末尾でディレクトリ名を指定してやれば、たとえばディレクトリ名を「sub」にした状態でサブモジュールを追加できます。
 
-@<code>{startdns01}
-
-
-
-
-デフォルトでは、このコマンドで指定したリポジトリと同名のディレクトリに、サブプロジェクトのデータが格納されます。他のディレクトリを使いたい場合は、コマンドの末尾にパスを追加してください。
-
-たり、作業中のリポジトリのサブモジュールとして既存のリポジトリを追加します。サブモジュールを新たに追加するには git submodule add コマンドを実行します。追跡したいプロジェクトの URL （絶対・相対のいずれも可）を引数に指定してください。この例では、“DbConnector” というライブラリを追加してみます。
+//cmd{
+git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated submodule
+//}
 
 
 == 親子の関係
