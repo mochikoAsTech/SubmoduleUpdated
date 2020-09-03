@@ -22,7 +22,7 @@ bookname: SubmoduleUpdated
 language: ja
 
 # 書名
-booktitle: {name: "何もしてないのにサブモジュールの差分が出て悩んだら読む本", file-as: "サブモジュールボン"}
+booktitle: {name: "Gitのサブモジュールで困ったら読む本", file-as: "ギットノサブモジュールデコマッタラヨムホン"}
 # subtitle: {name: "「なんとなく」から「ちゃんとわかる！」へ", file-as: "ナントナクカラチャントワカルへ"}
 
 # 著者名。「, 」で区切って複数指定できる
