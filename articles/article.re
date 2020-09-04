@@ -207,18 +207,102 @@ $ git submodule update
 
 == git checkoutしただけなのに差分が出た
 
-あなたはいまfeatureブランチで、親の認識するサブモジュールのバージョンを最新版にするという作業を行っています。もともと親が認識しているサブモジュールの年齢は8歳でしたが、実際のサブモジュールは既に10歳になっていました。そこでサブモジュールを10歳にして、親が認識しているサブモジュールの年齢を10歳に更新した上で、featureブランチをコミット＆プッシュをしました。いまは「更新したけど未コミットなもの」は何もない状態です。
+あなたはいまfeatureブランチで、親の認識するサブモジュールのバージョンを最新版にするという作業を行っています。もともと親が認識しているサブモジュールの年齢は8歳でしたが、実際のサブモジュールは既に10歳を迎えていました。メインのリポジトリでもサブモジュールを@<code>{git pull}して10歳にしてやり、親が認識しているサブモジュールの年齢を10歳に更新した上で、featureブランチをコミット＆プッシュをしました。いまは「更新したけど未コミットなもの」は何もない状態です。
 
-この状態で@<code>{git checkout master}して、masterブランチへ移動します。
-するとこんな差分が出ます。
+この状態で@<code>{git checkout master}して、masterブランチへ移動します。するとチェックアウトしてブランチを移動しただけなのに、@<code>{git status}を見るとこんな差分が表示されます。
 
+//cmd{
+$ git status
+（中略）
+        modified:   prh-rules (new commits)
 
+no changes added to commit (use "git add" and/or "git commit -a")
+//}
 
+メイ、なにも変えてないもん！masterをチェックアウトしただけだもん！ほんとだもん！と叫びたくなりますが、@<code>{git diff}でGitが「なにを更新したと言い張っているのか？」を見てみましょう。
 
+//cmd{
+$ git diff
+diff --git a/prh-rules b/prh-rules
+index f126abf..782af14 160000
+--- a/prh-rules
++++ b/prh-rules
+@@ -1 +1 @@
+-Subproject commit f126abf930039a23d5e6ea9f418451fe69277ddb　←8歳のサブモジュール
++Subproject commit 782af14a4dae78d62b591f7dab818826f721ca70　←10歳のサブモジュール
+//}
 
+そうです。@<code>{git checkout}しただけでは、サブモジュールの中身は自動追従してこないので、サブモジュールの中身は10歳のままです。でもmasterブランチでは、親が認識しているサブモジュールの年齢はまだ8歳です。そのため「子供が！！10歳になってる！！！8歳から10歳に更新したでしょ？！」となっているのです。
+
+masterブランチで何かを変えたい訳ではないので、こんなときは@<code>{git submodule update}を叩いて、そこにいるサブモジュールを、「親が認識している子の年齢」にアップデートしましょう。
+
+//cmd{
+メインプロジェクトが認識しているサブモジュールの状態にアップデートする
+$ git submodule update
+Submodule path 'prh-rules': checked out 'f126abf930039a23d5e6ea9f418451fe69277ddb'　←8歳のサブモジュールを連れてきた
+//}
+
+updateというと、どうしても「古いものから新しいものにアップデートする」というイメージなので、「10歳から8歳の状態に戻す」ために@<code>{git submodule update}をたたくのは不思議な感じがするかもしれません。でもサブモジュールを、「親が認識している子の年齢」にアップデートするのが@<code>{git submodule update}なので、これでいいのです。
 
 == サブモジュールでgit pullしただけなのに差分が出た
 
+あなたはいまメインリポジトリのmasterブランチにいます。
+一緒に開発しているメンバーから「サブモジュールのバージョン上げたから、masterブランチをpullしておいてね」と言われました。
+
+//cmd{
+$ git pull
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 2 (delta 1), reused 2 (delta 1), pack-reused 0
+Unpacking objects: 100% (2/2), 249 bytes | 14.00 KiB/s, done.
+From https://github.com/mochikoAsTech/SubmoduleUpdated
+   08bacf6..383f393  master     -> origin/master
+Updating 08bacf6..383f393
+Fast-forward
+ prh-rules | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+//}
+
+よしよし、prh-rulesの更新をpullできたぞ！と思って、確認のため@<code>{git status}を叩くと、なんとサブモジュールが更新されている、と出ます。
+
+//cmd{
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   prh-rules (new commits)
+
+no changes added to commit (use "git add" and/or "git commit -a")
+//}
+
+いまgit pullして連れてきたのに、なんで差分がでるの？私は更新してないよ？？という気持ちになります。では@<code>{git diff}でGitが「なにを更新したと言い張っているのか？」を見てみましょう。
+
+//cmd{
+$ git diff
+diff --git a/prh-rules b/prh-rules
+index 782af14..f126abf 160000
+--- a/prh-rules
++++ b/prh-rules
+@@ -1 +1 @@
+-Subproject commit 782af14a4dae78d62b591f7dab818826f721ca70　←10歳のサブモジュール
++Subproject commit f126abf930039a23d5e6ea9f418451fe69277ddb　←8歳のサブモジュール
+//}
+
+そうです。@<code>{git pull}したことによって、親が認識している子供の年齢は10歳になったのですが、サブモジュールの中身は自動追従してこないので8歳のままなのです。それによって「子供が10歳から8歳になってる！あなた更新したわね！」となっているのです。
+
+親の認識に合わせて、サブモジュールの中身も10歳になってほしいので、@<code>{git submodule update}を叩いて、そこにいるサブモジュールを、「親が認識している子の年齢」、つまり10歳にアップデートしましょう。
+
+//cmd{
+メインプロジェクトが認識しているサブモジュールの状態にアップデートする
+$ git submodule update
+Submodule path 'prh-rules': checked out '782af14a4dae78d62b591f7dab818826f721ca70'　←10歳のサブモジュールを連れてきた
+//}
+
+@<code>{git pull}したことで、メインリポジトリが認識しているサブモジュールのコミットが変わったんだから、そこはちゃんと付いてこいよ！と思いますが、そいうものなのです。筆者は@<code>{git pull && git submodule update}を叩いたら楽なのかな、と思ったりします。
 
 == 正しい差分の無くし方
 

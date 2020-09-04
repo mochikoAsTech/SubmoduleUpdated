@@ -59,7 +59,7 @@ dsr: ["Hikaru Wakamatsu / Shinya Nagashio"]
 # a-pbl, pbl: 出版社（発行所）
 pbl: ["mochikoAsTech"]
 # a-prt, prt: 印刷所
-prt: ["日光企画"]
+# prt: ["日光企画"] //今回は電子版のみなので印刷所なし
 # prt: TechBooster
 # a-red, red: 項目の枠組起草者
 # a-rev, rev: 評論者
