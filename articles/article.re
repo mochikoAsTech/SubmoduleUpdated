@@ -302,12 +302,14 @@ $ git submodule update
 Submodule path 'prh-rules': checked out '782af14a4dae78d62b591f7dab818826f721ca70'　←10歳のサブモジュールを連れてきた
 //}
 
-@<code>{git pull}したことで、メインリポジトリが認識しているサブモジュールのコミットが変わったんだから、そこはちゃんと付いてこいよ！と思いますが、そいうものなのです。筆者は@<code>{git pull && git submodule update}を叩いたら楽なのかな、と思ったりします。
+@<code>{git pull}したことで、メインリポジトリが認識しているサブモジュールのコミットが変わったんだから、そこはちゃんと付いてこいよ！と思いますが、そいうものなのです。筆者は@<code>{git pull && git submodule update}を叩いたら楽なのかな、と思っていました。
 
-== 正しい差分の無くし方
+== ラクでたのしい差分の無くし方
 
 @<code>{cd}コマンドでサブモジュールに移動して、そこで@<code>{git pull}してはいけないのです。親の認識にかかわらず、子が最新版になってしまいます。最新版が10歳で、親の認識も10歳であれば問題ありませんが、いずれにしてもこの方法はお勧めしません。
 
-メインプロジェクトが認識している、サブモジュールの状態にアップデートしたければ、@<code>{git submodule update}を使いましょう。
+@<code>{git pull}した後、メインプロジェクトが認識している、サブモジュールの状態にアップデートしたければ、@<code>{git submodule update}を使いましょう。
 
-筆者は@<code>{git pull && git submodule update}を叩いたら楽なのかな、と思ったりします。
+ちなみに@<code>{git pull && git submodule update}の代わりに、@<code>{git pull --recurse-submodules}でも同じ結果が得られるし、なんなら@<code>{git config submodule.recurse true}を叩いて、@<code>{submodule.recurse}@<fn>{config}を有効にしてしまえば、以降は@<code>{git pull}するだけで同じ結果が得られます。
+
+//footnote[config][ただしtrueにすると、@<code>{--recurse-submodules}オプションがあるすべてのコマンド (checkout、fetch、grep、pull、push、read-tree、reset、restore、switch) に適用されてしまいます。@<href>{https://git-scm.com/docs/git-config#Documentation/git-config.txt-submodulerecurse}]
