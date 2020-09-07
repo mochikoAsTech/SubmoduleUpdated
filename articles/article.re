@@ -7,7 +7,7 @@
 
 == Gitとは
 
-本書はGitのサブモジュールの挙動が分からずに苦しむ人のための本なので、Gitそのものについては解説しません。
+本書はGitのサブモジュールの挙動が分からずに苦しむ人のための本なので、Gitとはなにか？についてや、@<code>{git pull}、@<code>{git clone}といった初歩的なgitコマンドについては解説しません。
 「Gitについて何も知らないので1から学びたい」という方には、湊川あいさん@<fn>{llminatoll}の書籍がお勧めです。
 
 //footnote[llminatoll][@<href>{https://twitter.com/llminatoll}]
@@ -28,7 +28,7 @@
 Gitは付け焼き刃の操作だけを学ぶよりも、どういう仕組みで、どんな理屈で動いているのかをしっかり学んだ方が、結果としては理解の速度が上がります。@<fn>{know}
 わかばちゃんと一緒にたくさん転んで、Gitを楽しく学んでみてください。
 
-//footnote[know][Gitに限らず、どんなこともそうですよね。分かってはいるけれど、困ったらつい「Git いつ更新 調べる」のようにやりたいことベースで検索して、出てきたコマンドを叩いて、「なぜかは分からないけどできた！」みたいなこともしてしまうので、自分で書いていて耳が痛いです。]
+//footnote[know][Gitに限らず、どんなこともそうですよね。分かってはいるけれど、困ったらつい「Git いつ更新 調べる」のようにやりたいことベースで検索して、出てきたコマンドを叩いて、「なぜかは分からないけどできた！」みたいなことをしてしまうので、自分で書いていて耳が痛いです。]
 
 == Gitのサブモジュールとは
 
@@ -59,27 +59,33 @@ Gitは付け焼き刃の操作だけを学ぶよりも、どういう仕組み�
 
 //footnote[dir][フォルダのこと。WindowsやMacではフォルダと呼ぶ方が馴染みがあると思いますが、本書ではGitのドキュメントやLinuxに倣ってディレクトリと呼びます。]
 
-原稿リポジトリを作るたびに、いちいちコピーしてくるのは面倒です。さらに同時並行で色んな原稿を書いていると、あちらでの変更をこちらに持って来たり、今度はこちらでの変更をあちらに持って行ったりと、コピーペーストを繰り返す羽目になります。微妙に内容の違う正誤表が、古い原稿リポジトリに残っているのは気分的にもよくありません。ああ、校正ツールのディレクトリだけ別リポジトリに切り出せたらいいのに…！
+原稿リポジトリを作るたびに、いちいちコピーしてくるのは面倒です。さらに同時並行で色んな原稿を書いていると、あちらでの変更をこちらに持って来たり、今度はこちらでの変更をあちらに持って行ったりと、コピーペーストを繰り返す羽目になります。微妙に内容の違う正誤表が、古い原稿リポジトリに残っているのも気分的によくありません。ああ、@<strong>{校正ツールのディレクトリだけ別リポジトリに切り出せたら}いいのに…！
 
 そんなときに便利なのがサブモジュールです！校正ツールのディレクトリ（@<code>{prh-rules}）だけをひとつのリポジトリとして切り出しておき、それぞれの原稿リポジトリでサブモジュールとして指定してやればいいのです。
 
-先ほど「サブモジュールを使えば、あるプロジェクトのリポジトリを、別のリポジトリのサブディレクトリとして扱えるようになります。」と説明しましたが、これを実態に即した形で説明すると「サブモジュールを使えば、校正ツールのリポジトリを、それぞれの原稿リポジトリのサブディレクトリとして扱えるようになります。」となります。
+先ほど「サブモジュールを使えば、あるプロジェクトのリポジトリを、別のリポジトリのサブディレクトリとして扱えるようになります。」と説明しましたが、これを実態に即した形にすると「サブモジュールを使えば、校正ツールのリポジトリを、それぞれの原稿リポジトリのサブディレクトリとして扱えるようになります。」となります。
 
-サブモジュールは便利な一方で、挙動を理解せずに使うとトラブルの元になりやすいです。前述のように「たしかに！これは便利だ！」と思えるときに使いましょう。
+サブモジュールは便利な一方で、構造が複雑になるので、思わぬトラブルの元となることがあります。なんとなくではなく、前述のように「たしかに！これは便利だ！」と思えるときに使いましょう。
 
 == サブモジュールを使ってみよう
 
-サブモジュールを理解するには、使ってみるのがいちばんです。まずはサブモジュールを使うための、メインのリポジトリから作ってみましょう。次のgitコマンドを叩くと、@<code>{main_project}というリポジトリのディレクトリが生成されます。
+サブモジュールを理解するには、使ってみるのがいちばんです。まずはサブモジュールを使うための、メインのリポジトリから作ってみましょう。次の@<code>{git init main_project}というコマンドを叩くと、@<code>{main_project}というリポジトリのディレクトリが生成されます。
 
 //cmd{
 メインのリポジトリ（main_project）を作る
 $ git init main_project
-Initialized empty Git repository in C:/Users/mochikoAsTech/Documents/main_project/.git/
+Initialized empty Git repository
+ in C:/Users/mochikoAsTech/Documents/main_project/.git/
 //}
 
-続いてメインリポジトリのサブモジュールとして、既にGitHub上に存在している別のリポジトリ@<fn>{meta}を追加します。
+main_projectが生成されました。（@<img>{SubmoduleUpdated_6}）@<fn>{hidden}
 
-//footnote[meta][あなたが今読んでいるこの本の原稿リポジトリです。@<href>{https://github.com/mochikoAsTech/SubmoduleUpdated}]
+//footnote[hidden][@<code>{.git}が表示されない場合は、おそらく「ドットからはじまるファイルやフォルダは非表示」という設定になっています。Windowsなら「隠しファイルを表示する」にチェックを入れてください。Macなら@<code>{Command+Shift+.（ドット）}を押すことで表示されるようになります。]
+
+//image[SubmoduleUpdated_6][main_projectというリポジトリのディレクトリができた][scale=0.8]{
+//}
+
+続いてメインリポジトリのサブモジュールとして、既にGitHub上に存在している別のリポジトリ@<fn>{meta}を追加してみましょう。
 
 //cmd{
 作ったメインリポジトリのディレクトリに移動する
@@ -89,17 +95,20 @@ $ cd main_project
 $ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated
 //}
 
+//footnote[meta][サブモジュールとして追加したのは、あなたが今読んでいるこの本の原稿リポジトリです。@<href>{https://github.com/mochikoAsTech/SubmoduleUpdated}]
+
 今回はサブモジュールとして、本書の原稿リポジトリを追加してみました。（@<img>{SubmoduleUpdated_1}）@<fn>{url}
 
 //image[SubmoduleUpdated_1][SubmoduleUpdatedがサブモジュールとして追加された][scale=0.8]{
 //}
 
-サブモジュールを追加すると、追加したSubmoduleUpdatedをクローンしてくるため、こんな表示がされたと思います。
+サブモジュールを追加すると、自動的に追加したSubmoduleUpdatedの中身をクローンしてくるため、こんな表示がされたと思います。
 
-//footnote[url][今回はGitHubのURLを指定しましたが、このような絶対パスのURLに限らず、サブモジュールには@<code>{git submodule add ../SubmoduleUpdated}のような相対パスでローカルのリポジトリを指定することも可能です。ただし相対パスで追加すると、サブモジュールのリモートリポジトリのURL（@<code>{remote.origin.url}）が@<code>{C:/Users/mochikoAsTech/Documents/SubmoduleUpdated}や@<code>{../SubmoduleUpdated}のようになります。特に理由が無ければリモートのURLで指定しておきましょう。]
+//footnote[url][今回はサブモジュールとしてGitHubのURLを指定しましたが、このような絶対パスのURLに限らず、サブモジュールには@<code>{git submodule add ../SubmoduleUpdated}のような相対パスでローカルのリポジトリを指定することも可能です。ただし相対パスで追加すると、サブモジュールのリモートリポジトリのURL（@<code>{remote.origin.url}）が@<code>{C:/Users/mochikoAsTech/Documents/SubmoduleUpdated}や@<code>{../SubmoduleUpdated}のようになります。特に理由が無ければリモートのURLで指定しておきましょう。]
 
 //cmd{
-$ Cloning into 'C:/Users/mochikoAsTech/Documents/main_project/SubmoduleUpdated'...
+Cloning into
+ 'C:/Users/mochikoAsTech/Documents/main_project/SubmoduleUpdated'...
 remote: Enumerating objects: 251, done.
 remote: Counting objects: 100% (251/251), done.
 remote: Compressing objects: 100% (213/213), done.
@@ -114,19 +123,20 @@ Resolving deltas: 100% (103/103), done.
 //image[SubmoduleUpdated_2][サブモジュールのサブモジュールはまだ中身が空っぽ][scale=0.8]{
 //}
 
-サブモジュールのサブモジュール以下についても、すべて中身を連れてきたい場合は、次のコマンドでサブモジュールを再帰的に初期化しておきましょう。このコマンドは@<code>{main_project}ディレクトリで実行します。@<code>{SubmoduleUpdated}や@<code>{prh-rules}に移動して実行してはいけません。
+サブモジュールのサブモジュール以下についても、すべて中身を連れてきたい場合は、次のコマンドでサブモジュールを再帰的に初期化しておきましょう。このコマンドは、メインリポジトリである@<code>{main_project}ディレクトリで実行します。@<code>{SubmoduleUpdated}ディレクトリや@<code>{prh-rules}ディレクトリに移動して実行してはいけません。
 
 //cmd{
 サブモジュールを再帰的に初期化する
 $ git submodule update --init --recursive
-ubmodule 'prh-rules' (https://github.com/mochikoAsTech/prh-rules)
+Submodule 'prh-rules' (https://github.com/mochikoAsTech/prh-rules)
  registered for path 'SubmoduleUpdated/prh-rules'
-Cloning into 'C:/Users/mochikoAsTech/Documents/main_project/SubmoduleUpdated/prh-rules'...
+Cloning into
+ 'C:/Users/mochikoAsTech/Documents/main_project/SubmoduleUpdated/prh-rules'...
 Submodule path 'SubmoduleUpdated/prh-rules': checked out
  'ec6d80a111881e28c6e8e5129cfa6a49b995830b'
 //}
 
-サブモジュールを再帰的に初期化したことで、サブモジュールのさらにサブモジュール（@<code>{prh-rules}）の中身を連れてこられました。（@<img>{SubmoduleUpdated_3}）
+サブモジュールを再帰的に初期化したことで、サブモジュールのさらにサブモジュール（@<code>{prh-rules}）の中身もクローンできました。（@<img>{SubmoduleUpdated_3}）
 
 //image[SubmoduleUpdated_3][サブモジュールのサブモジュールの中身も連れてこられた][scale=0.8]{
 //}
@@ -134,10 +144,14 @@ Submodule path 'SubmoduleUpdated/prh-rules': checked out
 なおサブモジュールを追加するときには、先ほどのように特にディレクトリ名を指定しなければ、サブモジュールのリポジトリ名（@<code>{SubmoduleUpdated}）がそのままディレクトリ名となります。ディレクトリ名を変えたいときは、次のように末尾でディレクトリ名（@<code>{sub}）を指定します。するとディレクトリ名を「sub」にした状態でサブモジュールを追加できます。
 
 //cmd{
-git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated sub
+パターンA. サブモジュールとして「SubmoduleUpdated」を追加する
+$ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated
+
+パターンB. ディレクトリ名を「sub」にした状態でサブモジュールを追加する
+$ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated sub
 //}
 
-今回は「ディレクトリ名は特に指定しなかった」という前提で話を進めます。サブモジュールを追加してどうなったのか、@<code>{git status}でメインリポジトリの状態を確認してみましょう。
+今回はパターンAのように「ディレクトリ名は特に指定しなかった」という前提で話を進めます。サブモジュールを追加してどうなったのか、@<code>{git status}でメインリポジトリの状態を確認してみましょう。
 
 //cmd{
 $ git status
@@ -156,7 +170,7 @@ Changes to be committed:
 //image[SubmoduleUpdated_4][.gitmodulesとSubmoduleUpdatedの2つが新しいファイルとして認識されている][scale=0.8]{
 //}
 
-サブモジュールを追加すると、このようにメインのリポジトリに@<code>{.gitmodules}というファイルが生まれます。これはテキスト形式の設定ファイルで、テキストエディタで開くと、こんなふうにサブモジュールのディレクトリパスと、リモートのURLが書かれています。サブモジュールを複数追加した場合は、このファイルにサブモジュールの数だけ追記されていきます。
+サブモジュールを追加すると、このようにメインのリポジトリに@<code>{.gitmodules}というファイルが生まれます。これはテキスト形式のGitの設定ファイルです。テキストエディタで開くとこんなふうに、サブモジュールのディレクトリパスと、リモートのURLが書かれています。サブモジュールを複数追加した場合は、このファイルにサブモジュールの数だけ追記されていきます。
 
 //cmd{
 [submodule "SubmoduleUpdated"]
@@ -164,9 +178,9 @@ Changes to be committed:
 	url = https://github.com/mochikoAsTech/SubmoduleUpdated
 //}
 
-あなた以外の誰かが、この「サブモジュールを使っているメインリポジトリ」をクローンした場合、Gitはこの@<code>{.gitmodules}というファイルに書かれた内容を元に、サブモジュールの取得元を把握することになります。
+あなた以外の誰かが、この「サブモジュールを使っているメインリポジトリ」（@<code>{main_project}）をクローンした場合、Gitはこの@<code>{.gitmodules}というファイルに書かれた内容を元に、サブモジュールのパスや取得元を把握することになります。
 
-続いて@<code>{git diff}コマンドで@<code>{SubmoduleUpdated}の変更前と変更後の差分を見てみましょう。まだコミットしていないファイルの差分が見たいので、@<code>{--cached}オプションを付ける必要があります。変更前の@<code>{--- /dev/null}は、このファイルが新たに作られたものであることを表しています。
+続いて@<code>{git diff}コマンドでサブモジュール（@<code>{SubmoduleUpdated}）の変更前と変更後の差分を見てみましょう。まだコミットしていないファイルの差分が見たいので、@<code>{--cached}オプションを付ける必要があります。変更前の@<code>{--- /dev/null}は、このファイルが新たに作られたものであることを表しています。
 
 //cmd{
 $ git diff --cached SubmoduleUpdated
@@ -179,13 +193,13 @@ index 0000000..6f47087
 +Subproject commit 6f47087f1c9079ea6c677702da23ca040d0a13ed
 //}
 
-実際は@<code>{SubmoduleUpdated}はディレクトリであり、その中にはたくさんの原稿ファイルがあります。ですがメインのリポジトリからは、サブモジュールの中身を1つ1つ追跡するようなことはしません。代わりにこのサブディレクトリを、親から見た「子の年齢」のような@<code>{+Subproject commit 6f47087f1c9079ea6c677702da23ca040d0a13ed}という1つのコミットとして記録していることが分かります。
+実際は@<code>{SubmoduleUpdated}はディレクトリであり、その中にはたくさんの原稿ファイルがあります。ですがメインのリポジトリからは、サブモジュールの中身を1つ1つ追跡するようなことはしません。代わりにこのサブディレクトリを、@<code>{+Subproject commit 6f47087f1c9079ea6c677702da23ca040d0a13ed}という1つのコミットとして記録していることが分かります。
 
-メインのリポジトリを作って、そこにサブモジュールを追加する、という作業を体験してみました。ここで作った@<code>{main_project}というディレクトリは、まるごと消してしまって構いません。
+メインのリポジトリを作って、そこにサブモジュールを追加する、という一通りの流れを体験してみました。ここで作った@<code>{main_project}というディレクトリは、まるごと消してしまって構いません。
 
 == サブモジュールを含むリポジトリをクローンしてこよう
 
-さっきはローカルでリポジトリを作って、そこにサブモジュールを追加してみました。今度は@<code>{prh-rules}というサブモジュールを使っている、本著の原稿リポジトリをGitHubからクローンしてみましょう。
+さっきは「ローカルでリポジトリを作って、そこにサブモジュールを追加してみる」という流れを体験しました。今度は@<code>{prh-rules}というサブモジュールを使っている、本著の原稿リポジトリをGitHubからクローンしてみましょう。ローカルでのディレクトリ名は@<code>{sub_test}にします。
 
 //cmd{
 サブモジュールを使っているメインリポジトリをクローンしてくる
@@ -197,12 +211,12 @@ $ git clone https://github.com/mochikoAsTech/SubmoduleUpdated sub_test
 //image[SubmoduleUpdated_5][サブモジュールの中身は空っぽ！][scale=0.8]{
 //}
 
-実はサブモジュールを含むメインのリポジトリをクローンすると、「サブモジュールが入っているはずのディレクトリ」は取得できるのですが、最初の時点ではその中身は空っぽなのです。
+実はサブモジュールを含むメインのリポジトリをクローンすると、「サブモジュールが入っているはずのディレクトリ」は取得できるのですが、その時点ではその中身は空っぽなのです。
 
-サブモジュールを初期化する@<code>{--init}オプションを付けて、@<code>{git submodule update}することで、中身を連れてこられます。
+サブモジュールを初期化する@<code>{--init}オプションを付けて、@<code>{git submodule update}というコマンドを叩くことで、中身を連れてこられます。
 
 //cmd{
-サブモジュールの状態を初期化する（中身を連れてくる）
+サブモジュールの状態を初期化する（中身をクローンしてくる）
 $ git submodule update --init
 Submodule 'prh-rules' (https://github.com/mochikoAsTech/prh-rules)
  registered for path 'prh-rules'
@@ -211,13 +225,13 @@ Submodule path 'prh-rules': checked out
  'f126abf930039a23d5e6ea9f418451fe69277ddb'
 //}
 
-これでサブモジュールである@<code>{prh-rules}の中身、正誤表を含む校正ツールを一式持ってこられました。
+これでサブモジュールである@<code>{prh-rules}の中身、つまり正誤表を含む校正ツールを一式持ってこられました。
 
 == 最初からサブモジュールの中身も含めて全部連れてきたかった
 
-メインのリポジトリをクローンしてきた直後に、空っぽの@<code>{prh-rules}を見ると「使いたいからサブモジュールとして指定してるの！なんでサブモジュールの中身も一緒に連れてきてくれないの？！」という気持ちになります。@<fn>{okimochi}そういうときは@<code>{--recursive}オプションを付けてクローンすることで、最初からサブモジュールの中身も含めて全部まるっと連れてこられます。
+メインのリポジトリをクローンしてきた直後に、空っぽの@<code>{prh-rules}を見ると「なんでサブモジュールの中身も一緒に連れてきてくれないの？！」という気持ちになります。@<fn>{okimochi}そういうときは@<code>{--recursive}オプションを付けてクローンすることで、最初からサブモジュールの中身も含めて全部まるっと連れてこられます。
 
-//footnote[okimochi][みなさんがなるかどうかは分かりませんが筆者はなりました。なんで！一緒に！！連れてきてくれないの？！？！]
+//footnote[okimochi][みなさんがなるかどうかは分かりませんが筆者はなりました。なんで！一緒に！！連れてきてくれないの？！？！判子と朱肉はセットでしょ？！]
 
 //cmd{
 サブモジュールも含めて全部まるっとクローンしてくる
@@ -228,7 +242,7 @@ $ git clone --recursive https://github.com/mochikoAsTech/SubmoduleUpdated
 
 == メインリポジトリとサブモジュールは親子の関係
 
-ところで1つのものをいろんな名前で呼ぶと混乱するので、本書での名前を決めましょう。
+ところで1つのものをいろんな名前で呼ぶと混乱するので、ここから先の本書での名前を整理しておきましょう。
 
  * 親
  ** メインのリポジトリ（@<code>{SubmoduleUpdated}）のこと
@@ -236,12 +250,20 @@ $ git clone --recursive https://github.com/mochikoAsTech/SubmoduleUpdated
  ** メインリポジトリやスーパープロジェクトと呼ばれることもある
  * 子
  ** 親から見たサブモジュールのリポジトリ（@<code>{prh-rules}）のこと
- ** 子は親のディレクトリの中で、サブディレクトリ@<code>{SubmoduleUpdated/prh-rules}にある
+ ** 子（@<code>{prh-rules}）は、親（@<code>{SubmoduleUpdated}）の中にある
+ ** つまり子は親のサブディレクトリである
 
-たとえば、子のリポジトリではコミットが「A→B→C」と進んでいてCが最新です。けれど親のリポジトリではまだ子のBを指定して参照しているとします。
-この場合、親のリポジトリで@<code>{git submodule update}したら、子のCではなくBを連れてきます。
+メインリポジトリとサブモジュールは、親子のような関係になっています。
+親は常に最新の子を見ている訳ではなく、子の特定のコミットを「子」として認識しています。@<fn>{child}
 
-@<code>{git submodule update}とは、「子を最新にして！」というコマンドではなく、「"親が指定している時点（コミット）の子"に更新して！」なのです。
+//footnote[child][「俺さ、大学進学のタイミングで家を出たから、うちの親の中ではハタチのままの俺で時間が止まってるんだよね。だからお盆に帰るとからあげとか山盛り出されてさ…俺もう30過ぎてるし、揚げ物そんなに食べられないんだけどなー」みたいな感じですね。あ、なんか急に切ない。]
+
+たとえば、子のリポジトリではコミットが「A→B→C」と進んでいてCが最新ですが、親のリポジトリでは子の「Bのコミット」を指定しているとします。
+この場合、親のリポジトリで@<code>{git submodule update}コマンドを叩くと、最新のCではなくBの時点の子をクローンしてきます。
+
+つまり@<code>{git submodule update}は、「子を最新にして！」というコマンドではなく、「親が認識している時点（コミット）の子にして！」なのです。
+
+一方、親のサブディレクトリである子に@<code>{cd}して、@<code>{git pull}コマンドを叩くと、親の認識に関係なく最新の「Cのコミット」をクローンしてきます。親の認識している「Bのコミット」を連れてきたいのか、それとも親の認識に関係なく最新の「Cのコミット」を連れてきたいのか、自分がしたいのはどちらなのか？を把握して、適切なgitコマンドを叩くことが大切です。
 
 = サブモジュールのトラブルシューティング
 
