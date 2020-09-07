@@ -104,7 +104,7 @@ $ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated
 
 サブモジュールを追加すると、自動的に追加したSubmoduleUpdatedの中身をクローンしてくるため、こんな表示がされたと思います。
 
-//footnote[url][今回はサブモジュールとしてGitHubのURLを指定しましたが、このような絶対パスのURLに限らず、サブモジュールには@<code>{git submodule add ../SubmoduleUpdated}のような相対パスでローカルのリポジトリを指定することも可能です。ただし相対パスで追加すると、サブモジュールのリモートリポジトリのURL（@<code>{remote.origin.url}）が@<code>{C:/Users/mochikoAsTech/Documents/SubmoduleUpdated}や@<code>{../SubmoduleUpdated}のようになります。特に理由が無ければリモートのURLで指定しておきましょう。]
+//footnote[url][今回はサブモジュールとしてGitHubのURLを指定しましたが、このような絶対パスのURLだけでなく、@<code>{git submodule add ../SubmoduleUpdated}のような相対パスでローカルのリポジトリを指定することも可能です。ただし相対パスで追加すると、サブモジュールのリモートリポジトリのURL（@<code>{remote.origin.url}）が@<code>{C:/Users/mochikoAsTech/Documents/SubmoduleUpdated}や@<code>{../SubmoduleUpdated}のようになります。特に理由が無ければリモートのURLで指定しておきましょう。]
 
 //cmd{
 Cloning into
@@ -141,7 +141,7 @@ Submodule path 'SubmoduleUpdated/prh-rules': checked out
 //image[SubmoduleUpdated_3][サブモジュールのサブモジュールの中身も連れてこられた][scale=0.8]{
 //}
 
-なおサブモジュールを追加するときには、先ほどのように特にディレクトリ名を指定しなければ、サブモジュールのリポジトリ名（@<code>{SubmoduleUpdated}）がそのままディレクトリ名となります。ディレクトリ名を変えたいときは、次のように末尾でディレクトリ名（@<code>{sub}）を指定します。するとディレクトリ名を「sub」にした状態でサブモジュールを追加できます。
+なおサブモジュールを追加するときには、先ほどのように特にディレクトリ名を指定しなければ、サブモジュールのリポジトリ名（@<code>{SubmoduleUpdated}）がそのままディレクトリ名となります。ディレクトリ名を変えたいときは、次のパターンBのように末尾でディレクトリ名（@<code>{sub}）を指定します。するとディレクトリ名を「sub」にした状態でサブモジュールを追加できます。
 
 //cmd{
 パターンA. サブモジュールとして「SubmoduleUpdated」を追加する
@@ -151,7 +151,7 @@ $ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated
 $ git submodule add https://github.com/mochikoAsTech/SubmoduleUpdated sub
 //}
 
-今回はパターンAのように「ディレクトリ名は特に指定しなかった」という前提で話を進めます。サブモジュールを追加してどうなったのか、@<code>{git status}でメインリポジトリの状態を確認してみましょう。
+今回はパターンAのように「ディレクトリ名は特に指定しなかった」という前提で話を進めます。サブモジュールを追加してどうなったのか、@<code>{git status}コマンドでメインリポジトリの状態を確認してみましょう。
 
 //cmd{
 $ git status
@@ -165,7 +165,7 @@ Changes to be committed:
         new file:   SubmoduleUpdated
 //}
 
-@<code>{.gitmodules}と@<code>{SubmoduleUpdated}の2つが、新しいファイルとして認識されています。（@<img>{SubmoduleUpdated_4}）
+@<code>{new file}と表示されていることから、@<code>{.gitmodules}と@<code>{SubmoduleUpdated}の2つが、新しいファイルとして認識されていることが分かります。（@<img>{SubmoduleUpdated_4}）
 
 //image[SubmoduleUpdated_4][.gitmodulesとSubmoduleUpdatedの2つが新しいファイルとして認識されている][scale=0.8]{
 //}
@@ -195,18 +195,18 @@ index 0000000..6f47087
 
 実際は@<code>{SubmoduleUpdated}はディレクトリであり、その中にはたくさんの原稿ファイルがあります。ですがメインのリポジトリからは、サブモジュールの中身を1つ1つ追跡するようなことはしません。代わりにこのサブディレクトリを、@<code>{+Subproject commit 6f47087f1c9079ea6c677702da23ca040d0a13ed}という1つのコミットとして記録していることが分かります。
 
-メインのリポジトリを作って、そこにサブモジュールを追加する、という一通りの流れを体験してみました。ここで作った@<code>{main_project}というディレクトリは、まるごと消してしまって構いません。
+メインのリポジトリを作って、そこにサブモジュールを追加する、という一通りの流れを体験してみました。ここで作った@<code>{main_project}というディレクトリは、この後はもう使用しませんのでまるごと消してしまっても構いません。
 
 == サブモジュールを含むリポジトリをクローンしてこよう
 
-さっきは「ローカルでリポジトリを作って、そこにサブモジュールを追加してみる」という流れを体験しました。今度は@<code>{prh-rules}というサブモジュールを使っている、本著の原稿リポジトリをGitHubからクローンしてみましょう。ローカルでのディレクトリ名は@<code>{sub_test}にします。
+さっきは「ローカルでリポジトリを作って、そこにサブモジュールを追加してみる」という流れを体験しました。今度は@<code>{prh-rules}というサブモジュールを含む、本著の原稿リポジトリを、メインリポジトリとしてGitHubからクローンしてみましょう。ローカルでのディレクトリ名は@<code>{sub_test}にします。
 
 //cmd{
 サブモジュールを使っているメインリポジトリをクローンしてくる
 $ git clone https://github.com/mochikoAsTech/SubmoduleUpdated sub_test
 //}
 
-メインのリポジトリをクローンしてきたら、@<code>{prh-rules}というサブディレクトリを開いてみましょう。なんと中身は空っぽです。（@<img>{SubmoduleUpdated_5}）
+メインのリポジトリをクローンしてきたら、その中にある@<code>{prh-rules}というサブディレクトリを開いてみましょう。なんと中身は空っぽです。（@<img>{SubmoduleUpdated_5}）
 
 //image[SubmoduleUpdated_5][サブモジュールの中身は空っぽ！][scale=0.8]{
 //}
@@ -231,7 +231,7 @@ Submodule path 'prh-rules': checked out
 
 メインのリポジトリをクローンしてきた直後に、空っぽの@<code>{prh-rules}を見ると「なんでサブモジュールの中身も一緒に連れてきてくれないの？！」という気持ちになります。@<fn>{okimochi}そういうときは@<code>{--recursive}オプションを付けてクローンすることで、最初からサブモジュールの中身も含めて全部まるっと連れてこられます。
 
-//footnote[okimochi][みなさんがなるかどうかは分かりませんが筆者はなりました。なんで！一緒に！！連れてきてくれないの？！？！判子と朱肉はセットでしょ？！]
+//footnote[okimochi][みなさんがなるかどうかは分かりませんが筆者はなりました。なんで！サブモジュールの中身も一緒に！！連れてきてくれないの？！？！判子と朱肉はセットでしょ？！]
 
 //cmd{
 サブモジュールも含めて全部まるっとクローンしてくる
@@ -242,7 +242,7 @@ $ git clone --recursive https://github.com/mochikoAsTech/SubmoduleUpdated
 
 == メインリポジトリとサブモジュールは親子の関係
 
-ところで1つのものをいろんな名前で呼ぶと混乱するので、ここから先の本書での名前を整理しておきましょう。
+ところで1つのものをいろんな名前で呼ぶと混乱するので、ここから先の本書での呼び方を整理しておきましょう。
 
  * 親
  ** メインのリポジトリ（@<code>{SubmoduleUpdated}）のこと
@@ -263,7 +263,7 @@ $ git clone --recursive https://github.com/mochikoAsTech/SubmoduleUpdated
 
 つまり@<code>{git submodule update}は、「子を最新にして！」というコマンドではなく、「親が認識している時点（コミット）の子にアップデートして！」なのです。
 
-一方、親のサブディレクトリである子に@<code>{cd}して、@<code>{git pull}コマンドを叩くと、親の認識に関係なく最新の「Cのコミット」をクローンしてきます。親の認識している「Bのコミット」を連れてきたいのか、それとも親の認識に関係なく最新の「Cのコミット」を連れてきたいのか、自分がしたいのはどちらなのか？を把握して、適切なgitコマンドを叩くことが大切です。
+一方、親のサブディレクトリである子に@<code>{cd}して、@<code>{git pull}コマンドを叩くと、親の認識に関係なく最新の「Cのコミット」を連れてきます。親の認識している「Bのコミット」を連れてきたいのか、それとも親の認識に関係なく最新の「Cのコミット」を連れてきたいのか、自分がしたいのはどちらなのか？を把握して、適切なgitコマンドを叩くことが大切です。
 
 = サブモジュールのトラブルシューティング
 
@@ -292,8 +292,8 @@ $ git submodule status
 
 == 【トラブル】git pullしただけなのにサブモジュールの差分が生まれた
 
-あなたはいま親のmasterブランチにいます。
-一緒に開発しているメンバーに「masterブランチを更新したから@<code>{git pull}してね！サブモジュールも最新版になったよ」と言われました。幸い、手元でやりかけの作業はなかったので、「よし、じゃあ最新にするか！」と指示どおりに親で@<code>{git pull}コマンドを叩きました。
+あなたはいま親（@<code>{SubmoduleUpdated}）のmasterブランチにいます。
+一緒に開発しているメンバーに「masterブランチを更新したから@<code>{git pull}してね！サブモジュール（@<code>{prh-rules}）も最新版になったよ」と言われました。幸い、手元でやりかけの作業はなかったので、「よし、じゃあ最新にするか！」と指示どおりに親で@<code>{git pull}コマンドを叩きました。
 
 //cmd{
 $ git pull
@@ -338,10 +338,10 @@ index 782af14..f126abf 160000
 +Subproject commit f126abf930039a23d5e6ea9f418451fe69277ddb　←8歳のサブモジュール
 //}
 
-親を@<code>{git clone}したときのことを思い出してみましょう。あのときも、親を@<code>{git clode}しただけでは、子のディレクトリは空っぽで、@<code>{git submodule update --init}コマンドを叩いたことによって、初めてサブモジュールの中身を連れてくることができました。
+Chapter1で親を@<code>{git clone}したときのことを思い出してみましょう。あのときも、親を@<code>{git clode}しただけでは、子のディレクトリは空っぽで、@<code>{git submodule update --init}コマンドを叩いて初期化したことによって、初めてサブモジュールの中身を連れてくることができました。
 
-それと同じで、@<code>{git pull}しただけでは、親が認識している子の年齢（コミット）が最新の10歳になるだけで、実際の子（つまりサブモジュールのディレクトリ）の中身は自動追従してこないので、8歳のままなのです。
-つまり@<code>{git pull}したことによって、親の認識は「うちの子は8歳！」から「うちの子は10歳！」に変わったのですが、一方でそこにいる子供はまだアップデートされておらず8歳のままなので、親から見ると「10歳だったうちの子が8歳になってる！更新したんだね！差分がある！」という状態になっているのです。
+それと同じで、@<code>{git pull}しただけでは、親が認識している子の年齢（コミット）が最新の10歳になるだけで、実際の子（サブモジュールのディレクトリの中身）は自動追従してこないので、8歳のままなのです。
+つまり@<code>{git pull}したことによって、親の認識は「うちの子は8歳！」から「うちの子は10歳！」に変わったのですが、一方でそこにいる子供はまだアップデートされておらず8歳のままなので、親から見ると「10歳だったうちの子が8歳になってる！更新したんだね！差分があるよ！」という状態になっているのです。
 
 親の認識に合わせて、サブモジュールの中身も10歳になってほしいので、@<code>{git submodule update}コマンドを叩いて、そこにいるサブモジュールを、「親が認識している子の年齢」、つまり10歳にアップデートしましょう。
 
@@ -352,11 +352,11 @@ Submodule path 'prh-rules': checked out
  '782af14a4dae78d62b591f7dab818826f721ca70'　←10歳のサブモジュールを連れてきた
 //}
 
-@<code>{git pull}したことで、親が認識している子の年齢（コミット）が変わったんだから、そこはちゃんと付いてきてよ！と思いますが、そいうものなのです。
+@<code>{git pull}したことで、親が認識している子の年齢（コミット）が変わったんだから、そこはちゃんと付いてきてよ！と思いますが、そういうものなのです。
 
 == 【トラブル】他のブランチへ移動しただけでサブモジュールがなぜか更新された
 
-あなたはいまfeatureブランチで、「親の認識する子の年齢（コミット）を最新にする」という作業を行っています。もともと親が認識している子（サブモジュール）の年齢は8歳でしたが、実際のサブモジュールは既に10歳を迎えていました。親のリポジトリでサブモジュールのディレクトリに移動した上で、@<code>{git pull}コマンドを叩いて子を10歳にしてやり、親の認識を「うちの子は10歳！」に改めた上で、featureブランチをコミット＆プッシュをしました。いまは「更新したけど未コミットなもの」は何もない状態です。
+あなたはいまfeatureブランチで、「親の認識する子の年齢（コミット）を最新にする」という作業を行っています。もともと親が認識している子（サブモジュール）の年齢は8歳でしたが、実際の子は既に10歳を迎えていました。親のリポジトリでサブモジュールのディレクトリに移動した上で、@<code>{git pull}コマンドを叩いて子を10歳にしてやり、親の認識を「うちの子は10歳！」に改めた上で、それらの変更をfeatureブランチをコミット＆プッシュをしました。いまは「更新したけど未コミットなもの」は何もない状態です。
 
 この状態で@<code>{git checkout master}して、masterブランチへ移動します。するとチェックアウトしてブランチを移動しただけなのに、@<code>{git status}を見るとこんな差分が表示されます。
 
@@ -383,7 +383,7 @@ index f126abf..782af14 160000
 
 そうです。@<code>{git checkout master}しただけでは、子の中身は自動追従してこないので10歳のままなのです。ですがmasterブランチでは、親が認識している子の年齢はまだ8歳です。そのため「うちの子が！！10歳になってる！！！8歳から10歳に更新したでしょ？！」となっているのです。
 
-masterブランチで子の年齢を変えたい訳ではないので、こんなときは@<code>{git submodule update}を叩いて、そこにいるサブモジュールを、「親が認識している子の年齢」にアップデートしてあげましょう。
+masterブランチで子の年齢を変えたい訳ではないので、こんなときは@<code>{git submodule update}コマンドを叩いて、そこにいるサブモジュールを、「親が認識している子の年齢」にアップデートしてあげましょう。
 
 //cmd{
 サブモジュールを「親が認識している子の年齢（コミット）」にアップデートする
@@ -392,7 +392,7 @@ Submodule path 'prh-rules': checked out
  'f126abf930039a23d5e6ea9f418451fe69277ddb'　←8歳のサブモジュールを連れてきた
 //}
 
-updateというと、どうしても「古いものから新しいものにアップデートする」というイメージなので、「10歳から8歳の状態に戻す」ために@<code>{git submodule update}コマンドをたたくのは不思議な感じがするかもしれません。でもサブモジュールを、「親が認識している子の年齢」にアップデートするのが@<code>{git submodule update}なので、これでいいのです。
+@<code>{update}というと、どうしても「古いものから新しいものにアップデートする」というイメージなので、「10歳から8歳の状態に戻す」ために@<code>{git submodule update}コマンドをたたくのは不思議な感じがするかもしれません。でもサブモジュールを、「親が認識している子の年齢」にアップデートするのが@<code>{git submodule update}なので、これでいいのです。
 
 == 【トラブル】サブディレクトリでgit pullしたらなぜか更新された
 
@@ -442,8 +442,8 @@ index 4ac24b6..ec6d80a 160000
 +Subproject commit ec6d80a111881e28c6e8e5129cfa6a49b995830b　←8歳のサブモジュール
 //}
 
-「子を最新にすればいいんでしょ！」と思ったあなたは、子のディレクトリに@<code>{cd prh-rules}して、@<code>{git pull}を叩きました。
-再び@<code>{git diff}で確認してみたのですが、なんと差分はなくなっていません。親が認識している子の年齢（コミット）は9歳なのに、最新版の子を@<code>{git pull}して結果、9歳を飛び越えていきなり最新の10歳になってしまったようです。
+「子を最新にすればいいんでしょ！」と思ったあなたは、子のディレクトリに移動して、@<code>{git pull}を叩きました。
+そして再び@<code>{git diff}で確認してみたのですが、なんと差分はなくなっていません。親が認識している子の年齢（コミット）は9歳なのに、最新版の子を@<code>{git pull}した結果、9歳を飛び越えていきなり最新の10歳を連れてきてしまったようです。親が「9歳のはずのうちの子が！！10歳になってる！！！更新したでしょ？！」と驚いています。
 
 //cmd{
 $ git diff
@@ -465,16 +465,35 @@ Submodule path 'prh-rules': checked out
  '4ac24b6fd2df37053900fe21f611b9b4131b1941'　←9歳のサブモジュールを連れてきた
 //}
 
+これでサブモジュールの中身は「親が認識している子の年齢（コミット）」になり、意図しない差分もなくなりました。
+
 == 手間なくラクにサブモジュールを更新するには
 
-話をまとめると、@<code>{cd}コマンドでサブモジュールに移動して、そこで@<code>{git pull}してはいけないのです。親の認識にかかわらず、子が最新版になってしまいます。最新版が10歳で、親の認識も10歳であれば問題ありませんが、いずれにしてもこの方法はお勧めしません。
+話をまとめると、親が認識している年齢（コミット）の子を連れてきたいときには、@<code>{cd}コマンドでサブモジュールに移動して、そこで@<code>{git pull}してはいけません。親の認識にかかわらず、子が最新版になってしまいます。最新版が10歳で、親の認識も10歳であれば@<strong>{たまたま}問題は発生しませんが、いずれにしてもこの方法はお勧めしません。
 
-親で@<code>{git pull}した後、メインプロジェクトが認識している、サブモジュールの状態にアップデートしたければ、@<code>{git submodule update}を使いましょう。サブモジュールの中にさらにサブモジュールがいる場合は、@<code>{--recursive}オプションを付けた@<code>{git submodule update --recursive}を叩けば、入れ子になっているサブモジュールも再帰的にアップデートしてくれます。
+親で@<code>{git pull}した後、親（メインプロジェクト）が認識している、子（サブモジュール）の状態にアップデートしたければ、@<code>{git submodule update}を使いましょう。
 
-@<code>{git pull}と@<code>{git submodule update}で、いちいち2回叩くのは面倒だな、という場合は@<code>{git pull && git submodule update}でひとまとめにしてもかまいません。
+//cmd{
+サブモジュールを「親が認識している子の年齢（コミット）」にアップデートする
+$ git submodule update
+//}
 
-ですが@<code>{git pull && git submodule update}を叩くくらいなら、代わりに、@<code>{git pull --recurse-submodules}でも同じ結果が得られますし、なんなら@<code>{git config submodule.recurse true}を叩いて、@<code>{submodule.recurse}@<fn>{config}を有効にしてしまえば、以降は@<code>{git pull}するだけで同じ結果が得られます。
+サブモジュールの中にさらにサブモジュールがいる場合は、@<code>{--recursive}オプションを付けた@<code>{git submodule update --recursive}を叩けば、入れ子になっているサブモジュールも再帰的にアップデートしてくれます。
+
+//cmd{
+サブモジュールや、サブモジュールのサブモジュールを再帰的にアップデートする
+$ git submodule update --recursive
+//}
+
+@<code>{git pull}コマンドを叩いてから、さらに@<code>{git submodule update --recursive}コマンドを叩くのは面倒だな、という場合は@<code>{git pull && git submodule update --recursive}でひとまとめにしてもかまいません。
+
+ですが@<code>{git pull && git submodule update --recursive}を叩くくらいなら、代わりに、@<code>{git pull --recurse-submodules}でも同じ結果が得られます。さらに@<code>{git config submodule.recurse true}コマンドを叩いて、@<code>{submodule.recurse}@<fn>{config}を有効にしてしまえば、以降は@<code>{git pull}するだけで、ついでにサブモジュールも「親が認識している子の年齢（コミット）」で再帰的にアップデートしてもらえるようになります。
+
+//cmd{
+プルしたついでにサブモジュールを再帰的にアップデートする
+$ git pull --recurse-submodules
+//}
 
 サブモジュールの挙動を理解して、サブモジュールを手間なくラクに「親が認識している子の年齢（コミット）」にアップデートしましょう。
 
-//footnote[config][ただしtrueにすると、@<code>{--recurse-submodules}オプションがあるすべてのコマンド (checkout、fetch、grep、pull、push、read-tree、reset、restore、switch) に適用されます。@<href>{https://git-scm.com/docs/git-config#Documentation/git-config.txt-submodulerecurse}]
+//footnote[config][ただし@<code>{submodule.recurse}をtrueにすると、@<code>{pull}だけでなく@<code>{--recurse-submodules}オプションがあるすべてのコマンド (checkout、fetch、grep、pull、push、read-tree、reset、restore、switch) に影響が及びますので注意してください。@<href>{https://git-scm.com/docs/git-config#Documentation/git-config.txt-submodulerecurse}]
